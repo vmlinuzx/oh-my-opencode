@@ -292,6 +292,21 @@ export const NotificationConfigSchema = z.object({
   force_enable: z.boolean().optional(),
 })
 
+export const KeywordModeConfigSchema = z.object({
+  /** Regex pattern to match (case-insensitive by default) */
+  pattern: z.string(),
+  /** Inline prompt to inject when keyword is detected */
+  prompt: z.string().optional(),
+  /** Path to external .md file containing the prompt (supports ~ expansion) */
+  prompt_file: z.string().optional(),
+  /** Whether to show toast notification when mode activates (default: true) */
+  show_toast: z.boolean().default(true),
+  /** Custom toast title */
+  toast_title: z.string().optional(),
+  /** Custom toast message */
+  toast_message: z.string().optional(),
+})
+
 export const GitMasterConfigSchema = z.object({
   /** Add "Ultraworked with Sisyphus" footer to commit messages (default: true) */
   commit_footer: z.boolean().default(true),
@@ -319,6 +334,8 @@ export const OhMyOpenCodeConfigSchema = z.object({
   background_task: BackgroundTaskConfigSchema.optional(),
   notification: NotificationConfigSchema.optional(),
   git_master: GitMasterConfigSchema.optional(),
+  /** Custom keyword modes - define your own triggers and prompts */
+  keyword_modes: z.record(z.string(), KeywordModeConfigSchema).optional(),
 })
 
 export type OhMyOpenCodeConfig = z.infer<typeof OhMyOpenCodeConfigSchema>
@@ -341,5 +358,6 @@ export type CategoryConfig = z.infer<typeof CategoryConfigSchema>
 export type CategoriesConfig = z.infer<typeof CategoriesConfigSchema>
 export type BuiltinCategoryName = z.infer<typeof BuiltinCategoryNameSchema>
 export type GitMasterConfig = z.infer<typeof GitMasterConfigSchema>
+export type KeywordModeConfig = z.infer<typeof KeywordModeConfigSchema>
 
 export { AnyMcpNameSchema, type AnyMcpName, McpNameSchema, type McpName } from "../mcp/types"

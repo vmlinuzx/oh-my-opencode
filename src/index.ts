@@ -92,13 +92,13 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
   const sessionRecovery = isHookEnabled("session-recovery")
     ? createSessionRecoveryHook(ctx, { experimental: pluginConfig.experimental })
     : null;
-  
+
   // Check for conflicting notification plugins before creating session-notification
   let sessionNotification = null;
   if (isHookEnabled("session-notification")) {
     const forceEnable = pluginConfig.notification?.force_enable ?? false;
     const externalNotifier = detectExternalNotificationPlugin(ctx.directory);
-    
+
     if (externalNotifier.detected && !forceEnable) {
       // External notification plugin detected - skip our notification to avoid conflicts
       console.warn(getNotificationConflictWarning(externalNotifier.pluginName!));
@@ -116,8 +116,8 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
     : null;
   const toolOutputTruncator = isHookEnabled("tool-output-truncator")
     ? createToolOutputTruncatorHook(ctx, {
-        experimental: pluginConfig.experimental,
-      })
+      experimental: pluginConfig.experimental,
+    })
     : null;
   const directoryAgentsInjector = isHookEnabled("directory-agents-injector")
     ? createDirectoryAgentsInjectorHook(ctx)
@@ -141,33 +141,33 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
     "anthropic-context-window-limit-recovery"
   )
     ? createAnthropicContextWindowLimitRecoveryHook(ctx, {
-        experimental: pluginConfig.experimental,
-        dcpForCompaction: pluginConfig.experimental?.dcp_for_compaction,
-      })
+      experimental: pluginConfig.experimental,
+      dcpForCompaction: pluginConfig.experimental?.dcp_for_compaction,
+    })
     : null;
   const compactionContextInjector = isHookEnabled("compaction-context-injector")
     ? createCompactionContextInjector()
     : undefined;
   const preemptiveCompaction = isHookEnabled("preemptive-compaction")
     ? createPreemptiveCompactionHook(ctx, {
-        experimental: pluginConfig.experimental,
-        onBeforeSummarize: compactionContextInjector,
-        getModelLimit: (providerID, modelID) =>
-          getModelLimit(modelCacheState, providerID, modelID),
-      })
+      experimental: pluginConfig.experimental,
+      onBeforeSummarize: compactionContextInjector,
+      getModelLimit: (providerID, modelID) =>
+        getModelLimit(modelCacheState, providerID, modelID),
+    })
     : null;
   const rulesInjector = isHookEnabled("rules-injector")
     ? createRulesInjectorHook(ctx)
     : null;
   const autoUpdateChecker = isHookEnabled("auto-update-checker")
     ? createAutoUpdateCheckerHook(ctx, {
-        showStartupToast: isHookEnabled("startup-toast"),
-        isSisyphusEnabled: pluginConfig.sisyphus_agent?.disabled !== true,
-        autoUpdate: pluginConfig.auto_update ?? true,
-      })
+      showStartupToast: isHookEnabled("startup-toast"),
+      isSisyphusEnabled: pluginConfig.sisyphus_agent?.disabled !== true,
+      autoUpdate: pluginConfig.auto_update ?? true,
+    })
     : null;
   const keywordDetector = isHookEnabled("keyword-detector")
-    ? createKeywordDetectorHook(ctx, contextCollector)
+    ? createKeywordDetectorHook(ctx, contextCollector, pluginConfig)
     : null;
   const contextInjector = createContextInjectorHook(contextCollector);
   const contextInjectorMessagesTransform =
@@ -190,9 +190,9 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
 
   const ralphLoop = isHookEnabled("ralph-loop")
     ? createRalphLoopHook(ctx, {
-        config: pluginConfig.ralph_loop,
-        checkSessionExists: async (sessionId) => sessionExists(sessionId),
-      })
+      config: pluginConfig.ralph_loop,
+      checkSessionExists: async (sessionId) => sessionExists(sessionId),
+    })
     : null;
 
   const editErrorRecovery = isHookEnabled("edit-error-recovery")
@@ -467,7 +467,7 @@ const OhMyOpenCodePlugin: Plugin = async (ctx) => {
                 body: { parts: [{ type: "text", text: "continue" }] },
                 query: { directory: ctx.directory },
               })
-              .catch(() => {});
+              .catch(() => { });
           }
         }
       }

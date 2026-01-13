@@ -2384,6 +2384,39 @@
           "type": "boolean"
         }
       }
+    },
+    "keyword_modes": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "prompt_file": {
+            "type": "string"
+          },
+          "show_toast": {
+            "default": true,
+            "type": "boolean"
+          },
+          "toast_title": {
+            "type": "string"
+          },
+          "toast_message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern"
+        ]
+      }
     }
   }
 }
